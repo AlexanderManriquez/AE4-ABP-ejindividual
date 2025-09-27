@@ -1,0 +1,15 @@
+<section>
+  <h1>{{name}}</h1>
+  <p>{{bio}}</p>
+
+  <h2>Proyectos Destacados</h2>
+  <ul>
+    {{#each projects}}
+      <li>
+        <h3>{{this.title}}</h3>
+        <p>{{this.short_desc}}</p>
+        <img src="{{this.image}}" alt="{{this.title}}" width="200">
+      </li>
+    {{/each}}
+  </ul>
+</section>

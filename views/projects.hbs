@@ -1,0 +1,19 @@
+<section>
+  <h1>Mis Proyectos</h1>
+
+  {{#each projects}}
+    <article>
+      <h2>{{this.title}}</h2>
+      <img src="{{this.image}}" alt="{{this.title}}" width="300">
+      <p>{{this.long_desc}}</p>
+
+      <h3>Tecnologías Utilizadas:</h3>
+      <ul>
+        {{#each this.stack}}
+          <li>{{this}}</li>
+        {{/each}}
+      </ul>
+    </article>
+    <hr>
+  {{/each}}
+</section>
