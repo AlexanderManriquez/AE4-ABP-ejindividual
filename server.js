@@ -1,22 +1,31 @@
 const path = require('path');
 const express = require('express');
-const hbs = require('hbs');
+const exphbs = require('express-handlebars');
 
 const app = express();
 const PORT = 3001;
 
+// Rutas de carpetas
 const publicDir = path.join(__dirname, 'public');
 const viewsPath = path.join(__dirname, 'views');
+const layoutsPath = path.join(viewsPath, 'layouts');
 const partialsPath = path.join(viewsPath, 'partials');
 
-app.set('view engine', 'hbs');
+// Configuración de Handlebars con layouts y helpers
+app.engine('handlebars', exphbs.engine({
+  defaultLayout: 'main',
+  layoutsDir: layoutsPath,
+  partialsDir: partialsPath,
+  helpers: {
+    currentYear: () => new Date().getFullYear()
+  }
+}));
+app.set('view engine', 'handlebars');
 app.set('views', viewsPath);
-hbs.registerPartials(partialsPath);
-
-hbs.registerHelper('currentYear', () => new Date().getFullYear());
 
 app.use(express.static(publicDir));
 
+// Datos de proyectos
 const projects = [
   {
     id: 1,
@@ -47,41 +56,39 @@ const projects = [
   }
 ];
 
+// Manejo de rutas
 app.get('/', (req, res) => {
-res.render('home', {
-title: 'Inicio',
-name: 'Tu Nombre',
-bio: 'Soy desarrollador/a web y hago cosas bonitas con JavaScript.',
-projects
+  res.render('home', {
+    title: 'Inicio',
+    name: 'Alexander Manríquez',
+    bio: 'Soy un desarrollador web full-stack con experiencia en la creación de aplicaciones web dinámicas y responsivas. Me especializo en JavaScript, Node.js, y frameworks modernos como React y Vue.js. Me apasiona construir soluciones eficientes y escalables que mejoren la experiencia del usuario.',
+    projects
+  });
 });
-});
-
 
 app.get('/about', (req, res) => {
-res.render('about', {
-title: 'About',
-name: 'Tu Nombre',
-bio: 'Breve historia o presentación personal. Puedes decir en qué te especializas, tu background y qué buscas.'
+  res.render('about', {
+    title: 'About',
+    name: 'Alexander Manríquez',
+    bio: 'Breve historia o presentación personal. Puedes decir en qué te especializas, tu background y qué buscas.'
+  });
 });
-});
-
 
 app.get('/projects', (req, res) => {
-res.render('projects', {
-title: 'Proyectos',
-projects
-});
+  res.render('projects', {
+    title: 'Proyectos',
+    projects
+  });
 });
 
+// Ruta para páginas no encontradas
 app.use((req, res) => {
-res.status(404).render('404', {
-title: '404 - No encontrado',
-message: "Lo siento, no encontramos la página que buscas."
+  res.status(404).render('404', {
+    title: '404 - No encontrado',
+    message: "Lo siento, no encontramos la página que buscas."
+  });
 });
-});
-
-console.log('Partials path: ', partialsPath);
-console.log('Public dir: ', publicDir);
+// Iniciar el servidor
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
